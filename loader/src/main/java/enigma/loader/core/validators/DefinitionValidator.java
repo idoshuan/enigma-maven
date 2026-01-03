@@ -23,8 +23,9 @@ public class DefinitionValidator implements Validator {
         Set<Character> alphabetCharacters = toCharacterSet(alphabet);
         List<BTERotor> rotors = enigma.getBTERotors().getBTERotor();
         List<BTEReflector> reflectors = enigma.getBTEReflectors().getBTEReflector();
+        int requiredRotorCount = enigma.getRotorsCount().intValue();
         
-        new RotorValidator(rotors, alphabetCharacters).validate();
+        new RotorValidator(rotors, alphabetCharacters, requiredRotorCount).validate();
         new ReflectorValidator(reflectors, alphabet.length()).validate();
     }
 

@@ -31,8 +31,9 @@ public class XMLParser implements Parser {
         
         Map<Integer, Rotor> rotors = convertRotors(enigma.getBTERotors().getBTERotor(), alphabet);
         Map<Integer, Reflector> reflectors = convertReflectors(enigma.getBTEReflectors().getBTEReflector());
+        int requiredRotorCount = enigma.getRotorsCount().intValue();
 
-        return new Inventory(alphabet, rotors, reflectors);
+        return new Inventory(alphabet, rotors, reflectors, requiredRotorCount);
     }
 
     private Map<Integer, Rotor> convertRotors(List<BTERotor> bteRotors, Alphabet alphabet) {

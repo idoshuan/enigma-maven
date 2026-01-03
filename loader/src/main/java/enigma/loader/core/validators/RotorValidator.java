@@ -14,16 +14,19 @@ public class RotorValidator implements Validator {
     private final List<BTERotor> rotors;
     private final Set<Character> alphabetCharacters;
     private final int alphabetLength;
+    private final int requiredRotorCount;
 
-    public RotorValidator(List<BTERotor> rotors, Set<Character> alphabetCharacters) {
+    public RotorValidator(List<BTERotor> rotors, Set<Character> alphabetCharacters, int requiredRotorCount) {
         this.rotors = rotors;
         this.alphabetCharacters = alphabetCharacters;
         this.alphabetLength = alphabetCharacters.size();
+        this.requiredRotorCount = requiredRotorCount;
     }
 
     @Override
     public void validate() {
         ensureMinimumRotors();
+        ensureSufficientRotorsForRequiredCount();
         ensureContinuousIds();
         ensureValidNotchPositions();
         ensureValidMappingCount();
@@ -34,6 +37,12 @@ public class RotorValidator implements Validator {
     private void ensureMinimumRotors() {
         if (rotors.size() < Constants.MINIMUM_ROTORS) {
             throw new MinimumRotorsException(Constants.MINIMUM_ROTORS, rotors.size());
+        }
+    }
+
+    private void ensureSufficientRotorsForRequiredCount() {
+        if (rotors.size() < requiredRotorCount) {
+            throw new InsufficientRotorsForRequiredCountException(requiredRotorCount, rotors.size());
         }
     }
 

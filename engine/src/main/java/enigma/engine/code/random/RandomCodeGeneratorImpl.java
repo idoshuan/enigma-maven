@@ -1,6 +1,5 @@
 package enigma.engine.code.random;
 
-import enigma.core.Constants;
 import enigma.core.Inventory;
 import enigma.engine.dtos.MachineCode;
 
@@ -25,7 +24,7 @@ public class RandomCodeGeneratorImpl implements RandomCodeGenerator {
 
     @Override
     public MachineCode generate() {
-        int numOfRotorsToUse = random.nextInt(Constants.MINIMUM_ROTORS, inventory.getRotorCount() + 1);
+        int numOfRotorsToUse = inventory.requiredRotorCount();
 
         List<Integer> rotorIds = getRandomRotorIds(numOfRotorsToUse);
         List<Character> positions = getRandomPositions(numOfRotorsToUse);

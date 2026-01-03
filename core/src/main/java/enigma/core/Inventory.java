@@ -8,14 +8,16 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
 
-public record Inventory(Alphabet alphabet, Map<Integer, Rotor> rotors, Map<Integer, Reflector> reflectors) implements Serializable {
+public record Inventory(Alphabet alphabet, Map<Integer, Rotor> rotors, Map<Integer, Reflector> reflectors, int requiredRotorCount) implements Serializable {
 
     public Inventory(Alphabet alphabet,
                      Map<Integer, Rotor> rotors,
-                     Map<Integer, Reflector> reflectors) {
+                     Map<Integer, Reflector> reflectors,
+                     int requiredRotorCount) {
         this.alphabet = alphabet;
         this.rotors = Map.copyOf(rotors);
         this.reflectors = Map.copyOf(reflectors);
+        this.requiredRotorCount = requiredRotorCount;
     }
 
     public Rotor getRotor(int id) {

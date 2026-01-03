@@ -183,6 +183,12 @@ public class EngineImpl implements Engine {
     }
 
     @Override
+    public int getRequiredRotorCount() {
+        requireLoadedFile();
+        return inventory.requiredRotorCount();
+    }
+
+    @Override
     public void saveState(String path) {
         requireConfiguredMachine();
 

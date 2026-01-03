@@ -1,6 +1,5 @@
 package enigma.engine.code.validators;
 
-import enigma.core.Constants;
 import enigma.core.Inventory;
 import enigma.engine.dtos.MachineCode;
 import enigma.engine.exceptions.setup.*;
@@ -25,8 +24,9 @@ public class CodeValidator {
     }
 
     private void validateRotorCount(MachineCode setup) {
-        if (setup.rotorIds().size() < Constants.MINIMUM_ROTORS) {
-            throw new InvalidRotorCountException(Constants.MINIMUM_ROTORS, setup.rotorIds().size());
+        int required = inventory.requiredRotorCount();
+        if (setup.rotorIds().size() != required) {
+            throw new InvalidRotorCountException(required, setup.rotorIds().size());
         }
     }
 

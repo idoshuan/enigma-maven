@@ -106,11 +106,12 @@ public class ConsoleImpl implements Console {
     private void displayAvailableComponents() {
         Set<Integer> availableRotorIds = engine.getAvailableRotorIds();
         Set<Integer> availableReflectorIds = engine.getAvailableReflectorIds();
+        int requiredRotors = engine.getRequiredRotorCount();
         
         display.showInfo("=== Manual Machine Configuration ===");
         display.showInfo("Available Rotors: " + availableRotorIds);
         display.showInfo("Available Reflectors: " + availableReflectorIds);
-        display.showInfo("Note: You must select at least 3 rotors (no duplicates)\n");
+        display.showInfo("Note: You must select exactly " + requiredRotors + " rotors (no duplicates)\n");
     }
     
     private List<Integer> collectRotorIds() {

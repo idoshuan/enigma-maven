@@ -18,6 +18,7 @@ public interface Engine {
     List<SessionRecord> getStatistics();
     Set<Integer> getAvailableRotorIds();
     Set<Integer> getAvailableReflectorIds();
+    int getRequiredRotorCount();
     void saveState(String path);
     void loadState(String path);
 }
