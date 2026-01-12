@@ -22,5 +22,9 @@ public class ConfigurationInputParser {
     public int parseReflectorId(String input) {
         return Integer.parseInt(input.trim());
     }
+
+    public String parsePlugboard(String input) {
+        return input.toUpperCase();
+    }
 }
 

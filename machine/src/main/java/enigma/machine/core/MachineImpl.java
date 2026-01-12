@@ -22,9 +22,13 @@ public class MachineImpl implements Machine {
 
         rotateRotors();
 
+        signal = machineConfig.getPlugboard().swap(signal);
+
         signal = passSignalForward(signal);
         signal = passSignalThroughReflector(signal);
         signal = passSignalBackward(signal);
+
+        signal = machineConfig.getPlugboard().swap(signal);
 
         return alphabet.toChar(signal);
     }
@@ -50,7 +54,7 @@ public class MachineImpl implements Machine {
     private void rotateRotors() {
         List<MountedRotor> rotors = machineConfig.getRotors();
 
-        rotors.get(0).rotate();
+        rotors.getFirst().rotate();
         for (int i = 0; i < rotors.size() - 1; i++) {
             if (rotors.get(i).isAtNotch()) {
                 rotors.get(i + 1).rotate();

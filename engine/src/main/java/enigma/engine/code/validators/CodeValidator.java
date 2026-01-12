@@ -21,6 +21,7 @@ public class CodeValidator {
         validatePositionCount(setup);
         validatePositionRange(setup);
         validateReflectorIdExists(setup);
+        validatePlugboard(setup);
     }
 
     private void validateRotorCount(MachineCode setup) {
@@ -67,4 +68,46 @@ public class CodeValidator {
         }
     }
 
+private void validatePlugboard(MachineCode setup) {
+    String plugboardPairs = setup.plugboardPairs();
+
+    if (plugboardPairs == null || plugboardPairs.isEmpty()) {
+        return;
+    }
+
+    if (plugboardPairs.length() % 2 != 0) {
+        throw new PlugboardOddLengthException(plugboardPairs.length());
+    }
+
+    Set<Character> usedCharacters = new HashSet<>();
+
+    for (int i = 0; i < plugboardPairs.length(); i += 2) {
+        char first = plugboardPairs.charAt(i);
+        char second = plugboardPairs.charAt(i + 1);
+        
+        validatePlugboardPair(first, second, usedCharacters);
+    }
+}
+
+private void validatePlugboardPair(char first, char second, Set<Character> usedCharacters) {
+    validateCharacterInAlphabet(first);
+    validateCharacterInAlphabet(second);
+    
+    if (first == second) {
+        throw new PlugboardSelfPairException(first);
+    }
+    
+    if (!usedCharacters.add(first)) {
+        throw new PlugboardDuplicateCharacterException(first);
+    }
+    if (!usedCharacters.add(second)) {
+        throw new PlugboardDuplicateCharacterException(second);
+    }
+}
+
+private void validateCharacterInAlphabet(char character) {
+    if (!inventory.alphabet().contains(character)) {
+        throw new PlugboardInvalidCharacterException(character, inventory.alphabet().getCharacters());
+    }
+}
 }

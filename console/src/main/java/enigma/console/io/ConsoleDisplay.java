@@ -22,8 +22,8 @@ public class ConsoleDisplay {
         System.out.print(formatter.formatEngineDetails(details));
     }
 
-    public void showProcessResult(String input, String output) {
-        System.out.println(formatter.formatProcessResult(input, output));
+    public void showProcessResult(String output) {
+        System.out.println(formatter.formatProcessResult(output));
     }
 
     public void showStatistics(List<SessionRecord> statistics) {

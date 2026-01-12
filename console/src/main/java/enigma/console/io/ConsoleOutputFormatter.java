@@ -28,7 +28,33 @@ public class ConsoleOutputFormatter {
 
         String reflectorStr = RomanNumeral.fromInt(code.reflectorId()).name();
 
-        return "<" + rotorIdsStr + "><" + positionsStr + "><" + reflectorStr + ">";
+        StringBuilder result = new StringBuilder();
+        result.append("<").append(rotorIdsStr).append(">");
+        result.append("<").append(positionsStr).append(">");
+        result.append("<").append(reflectorStr).append(">");
+
+        if (code.hasPlugboardPairs()) {
+            result.append("<").append(formatPlugboardPairs(code.plugboardPairs())).append(">");
+        }
+
+        return result.toString();
+    }
+
+    private String formatPlugboardPairs(String plugboardPairs) {
+        if (plugboardPairs == null || plugboardPairs.isEmpty()) {
+            return "";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < plugboardPairs.length(); i += 2) {
+            if (i > 0) {
+                sb.append(",");
+            }
+            sb.append(plugboardPairs.charAt(i));
+            sb.append("|");
+            sb.append(plugboardPairs.charAt(i + 1));
+        }
+        return sb.toString();
     }
 
     public String formatEngineDetails(EngineDetails details) {
@@ -50,7 +76,7 @@ public class ConsoleOutputFormatter {
         return sb.toString();
     }
 
-    public String formatProcessResult(String input, String output) {
+    public String formatProcessResult(String output) {
         return String.format("Output: %s", output);
     }
 

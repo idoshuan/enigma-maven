@@ -1,10 +1,7 @@
 package enigma.console.menu;
 
-import enigma.console.core.EngineState;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MenuImpl implements Menu {
 
@@ -27,9 +24,7 @@ public class MenuImpl implements Menu {
     }
 
     @Override
-    public List<MenuItem> getAvailableItems(EngineState engineState) {
-        return items.stream()
-                .filter(item -> item.requiredEngineState().isAvailableIn(engineState))
-                .collect(Collectors.toList());
+    public List<MenuItem> getAllItems() {
+        return new ArrayList<>(items);
     }
 }

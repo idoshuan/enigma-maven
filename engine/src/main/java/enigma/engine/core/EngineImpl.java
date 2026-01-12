@@ -18,6 +18,8 @@ import enigma.loader.core.Loader;
 import enigma.machine.configuration.MachineConfigImpl;
 import enigma.machine.core.Machine;
 import enigma.machine.core.MachineImpl;
+import enigma.machine.plugboard.Plugboard;
+import enigma.machine.plugboard.PlugboardImpl;
 
 import java.io.*;
 import java.util.List;
@@ -97,9 +99,31 @@ public class EngineImpl implements Engine {
                 .mapToObj(i -> rotors.get(i).charToPosition(code.positions().get(i)))
                 .toList();
 
+        Plugboard plugboard = createPlugboard(code.plugboardPairs());
+
         initialCode = Optional.of(code);
-        machine.setConfig(new MachineConfigImpl(rotors, positionIndices, reflector));
+        machine.setConfig(new MachineConfigImpl(rotors, positionIndices, reflector, plugboard));
         statisticsTracker.addSession(codeDetailsFactory.create(code));
+    }
+
+    private Plugboard createPlugboard(String plugboardPairs) {
+        Alphabet alphabet = inventory.alphabet();
+
+        if (plugboardPairs == null || plugboardPairs.isEmpty()) {
+            return PlugboardImpl.identity(alphabet.size());
+        }
+
+        int pairCount = plugboardPairs.length() / 2;
+        int[][] pairs = new int[pairCount][2];
+
+        for (int i = 0; i < pairCount; i++) {
+            char char1 = plugboardPairs.charAt(i * 2);
+            char char2 = plugboardPairs.charAt(i * 2 + 1);
+            pairs[i][0] = alphabet.toIndex(char1);
+            pairs[i][1] = alphabet.toIndex(char2);
+        }
+
+        return PlugboardImpl.fromIndexPairs(alphabet.size(), pairs);
     }
 
     @Override
@@ -138,7 +162,7 @@ public class EngineImpl implements Engine {
     @Override
     public void resetConfiguration() {
         requireConfiguredMachine();
-        configureMachine(initialCode.get());
+        configureMachineWithPositions(initialCode.get());
     }
 
     @Override
@@ -237,7 +261,9 @@ public class EngineImpl implements Engine {
                 .mapToObj(i -> rotors.get(i).charToPosition(code.positions().get(i)))
                 .toList();
 
-        machine.setConfig(new MachineConfigImpl(rotors, positionIndices, reflector));
+        Plugboard plugboard = createPlugboard(code.plugboardPairs());
+
+        machine.setConfig(new MachineConfigImpl(rotors, positionIndices, reflector, plugboard));
     }
 }
 

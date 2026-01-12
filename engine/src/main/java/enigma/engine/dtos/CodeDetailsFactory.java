@@ -19,7 +19,8 @@ public class CodeDetailsFactory {
                 code.rotorIds(),
                 code.positions(),
                 code.reflectorId(),
-                calculateNotchDistances(code)
+                calculateNotchDistances(code),
+                code.plugboardPairs()
         );
     }
 

@@ -48,11 +48,17 @@ public class ConsoleImpl implements Console {
 
         while (isRunning) {
             try {
-                List<MenuItem> availableItems = menu.getAvailableItems(stateManager.getCurrentState());
-                display.showMenu(menu.getTitle(), availableItems);
+                List<MenuItem> allItems = menu.getAllItems();
+                display.showMenu(menu.getTitle(), allItems);
                 display.showPrompt("\nEnter your choice: ");
-                int choice = inputHandler.readChoice(1, availableItems.size());
-                availableItems.get(choice - 1).action().execute();
+                int choice = inputHandler.readChoice(1, allItems.size());
+                MenuItem selected = allItems.get(choice - 1);
+                
+                if (selected.isAvailableIn(stateManager.getCurrentState())) {
+                    selected.action().execute();
+                } else {
+                    display.showError(selected.getUnavailableReason(stateManager.getCurrentState()));
+                }
             } catch (ConsoleException e) {
                 display.showError(e.getMessage());
             }
@@ -82,18 +88,19 @@ public class ConsoleImpl implements Console {
             List<Integer> rotorIds = collectRotorIds();
             List<Character> positions = collectPositions();
             int reflectorId = collectReflectorId();
+            String plugboardPairs = collectPlugboardPairs();
 
             Collections.reverse(rotorIds);
             Collections.reverse(positions);
             
-            MachineCode machineCode = new MachineCode(rotorIds, positions, reflectorId);
+            MachineCode machineCode = new MachineCode(rotorIds, positions, reflectorId, plugboardPairs);
             engine.configureMachineManually(machineCode);
             
             stateManager.transitionToConfigured();
             display.showSuccess("Machine configured manually!");
 
-
-            display.showInfo("Configuration: Rotors (L->R)=" + rotorIds + ", Positions (L->R)=" + positions + ", Reflector=" + reflectorId);
+            String plugboardDisplay = formatPlugboardForDisplay(plugboardPairs);
+            display.showInfo("Configuration: Rotors (L->R)=" + rotorIds + ", Positions (L->R)=" + positions + ", Reflector=" + reflectorId + ", Plugboard=" + plugboardDisplay);
         } catch (EngineException e) {
             display.showError(e.getMessage());
         } catch (NumberFormatException e) {
@@ -133,6 +140,30 @@ public class ConsoleImpl implements Console {
         return parser.parseReflectorId(input);
     }
 
+    private String collectPlugboardPairs() {
+        display.showInfo("\nEnter plugboard pairs as a continuous string (e.g., ABXY for A-B and X-Y pairs):");
+        display.showInfo("Note: Leave empty for no plugboard connections. Spaces and special characters are valid.");
+        String input = inputHandler.readLine("Plugboard: ");
+        return parser.parsePlugboard(input);
+    }
+
+    private String formatPlugboardForDisplay(String plugboardPairs) {
+        if (plugboardPairs == null || plugboardPairs.isEmpty()) {
+            return "None";
+        }
+
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < plugboardPairs.length(); i += 2) {
+            if (i > 0) {
+                result.append(", ");
+            }
+            result.append(plugboardPairs.charAt(i))
+                  .append("-")
+                  .append(plugboardPairs.charAt(i + 1));
+        }
+        return result.toString();
+    }
+
     private void configureRandomly() {
         engine.configureMachineRandomly();
         stateManager.transitionToConfigured();
@@ -143,7 +174,7 @@ public class ConsoleImpl implements Console {
         try {
             String input = inputHandler.readLine("Enter text to process: ");
             String output = engine.process(input);
-            display.showProcessResult(input, output);
+            display.showProcessResult(output);
         } catch (EngineException e) {
             display.showError(e.getMessage());
         }
@@ -188,16 +219,16 @@ public class ConsoleImpl implements Console {
     private Menu configureMenu() {
         Menu menu = new MenuImpl("Enigma Machine");
 
-        menu.addItem(new MenuItem("Load machine configuration from file", EngineState.UNINITIALIZED, this::loadConfiguration));
-        menu.addItem(new MenuItem("Load saved machine state from file", EngineState.UNINITIALIZED, this::loadMachineState));
-        menu.addItem(new MenuItem("Display machine specifications", EngineState.INITIALIZED, this::displaySpecifications));
-        menu.addItem(new MenuItem("Configure machine manually", EngineState.INITIALIZED, this::configureManually));
-        menu.addItem(new MenuItem("Configure machine randomly",  EngineState.INITIALIZED, this::configureRandomly));
-        menu.addItem(new MenuItem("Process input text", EngineState.CONFIGURED, this::processInput));
-        menu.addItem(new MenuItem("Reset machine to initial configuration", EngineState.CONFIGURED, this::resetMachine));
-        menu.addItem(new MenuItem("Save machine state to file", EngineState.CONFIGURED, this::saveMachineState));
-        menu.addItem(new MenuItem("Display statistics and history", EngineState.INITIALIZED, this::displayStatistics));
+        menu.addItem(new MenuItem("Load Machine Details from XML File", EngineState.UNINITIALIZED, this::loadConfiguration));
+        menu.addItem(new MenuItem("Get Current Machine Status", EngineState.INITIALIZED, this::displaySpecifications));
+        menu.addItem(new MenuItem("Manual Code Setup", EngineState.INITIALIZED, this::configureManually));
+        menu.addItem(new MenuItem("Random Code Setup", EngineState.INITIALIZED, this::configureRandomly));
+        menu.addItem(new MenuItem("Process Input", EngineState.CONFIGURED, this::processInput));
+        menu.addItem(new MenuItem("Reset to Original Code", EngineState.CONFIGURED, this::resetMachine));
+        menu.addItem(new MenuItem("History", EngineState.INITIALIZED, this::displayStatistics));
         menu.addItem(new MenuItem("Exit", EngineState.UNINITIALIZED, this::quit));
+        menu.addItem(new MenuItem("Load from File", EngineState.UNINITIALIZED, this::loadMachineState));
+        menu.addItem(new MenuItem("Save to File", EngineState.CONFIGURED, this::saveMachineState));
 
         return menu;
     }

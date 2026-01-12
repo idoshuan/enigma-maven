@@ -29,8 +29,9 @@ public class RandomCodeGeneratorImpl implements RandomCodeGenerator {
         List<Integer> rotorIds = getRandomRotorIds(numOfRotorsToUse);
         List<Character> positions = getRandomPositions(numOfRotorsToUse);
         int reflectorId = getRandomReflectorId();
+        String plugboardPairs = getRandomPlugboardPairs();
 
-        return new MachineCode(rotorIds, positions, reflectorId);
+        return new MachineCode(rotorIds, positions, reflectorId, plugboardPairs);
     }
 
     private List<Integer> getRandomRotorIds(int count) {
@@ -48,5 +49,40 @@ public class RandomCodeGeneratorImpl implements RandomCodeGenerator {
     private int getRandomReflectorId() {
         List<Integer> availableIds = new ArrayList<>(inventory.getReflectorIds());
         return availableIds.get(random.nextInt(availableIds.size()));
+    }
+
+    private String getRandomPlugboardPairs() {
+        int maxPairs = inventory.alphabet().size() / 2;
+        int numPairs = selectRandomPairCount(maxPairs);
+
+        if (numPairs == 0) {
+            return "";
+        }
+
+        return buildPlugboardString(numPairs);
+    }
+
+    private int selectRandomPairCount(int maxPairs) {
+        return (int) (random.nextDouble() * random.nextDouble() * (maxPairs + 1));
+    }
+
+    private String buildPlugboardString(int numPairs) {
+        List<Character> shuffledCharacters = getShuffledAlphabetCharacters();
+
+        StringBuilder plugboardPairs = new StringBuilder();
+        for (int i = 0; i < numPairs * 2; i++) {
+            plugboardPairs.append(shuffledCharacters.get(i));
+        }
+
+        return plugboardPairs.toString();
+    }
+
+    private List<Character> getShuffledAlphabetCharacters() {
+        List<Character> characters = new ArrayList<>();
+        for (int i = 0; i < inventory.alphabet().size(); i++) {
+            characters.add(inventory.alphabet().toChar(i));
+        }
+        Collections.shuffle(characters, random);
+        return characters;
     }
 }
