@@ -6,21 +6,21 @@
 
     <parent>
         <groupId>patmal.course.enigma</groupId>
-        <artifactId>aggregator-enigma</artifactId>
+        <artifactId>enigma-aggregator</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>console</artifactId>
+    <artifactId>enigma-console</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>patmal.course.enigma</groupId>
-            <artifactId>engine</artifactId>
+            <artifactId>enigma-engine</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>patmal.course.enigma</groupId>
-            <artifactId>loader</artifactId>
+            <artifactId>enigma-loader</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
