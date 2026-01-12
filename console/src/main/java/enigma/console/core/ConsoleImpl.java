@@ -219,16 +219,16 @@ public class ConsoleImpl implements Console {
     private Menu configureMenu() {
         Menu menu = new MenuImpl("Enigma Machine");
 
-        menu.addItem(new MenuItem("Load Machine Details from XML File", EngineState.UNINITIALIZED, this::loadConfiguration));
-        menu.addItem(new MenuItem("Get Current Machine Status", EngineState.INITIALIZED, this::displaySpecifications));
-        menu.addItem(new MenuItem("Manual Code Setup", EngineState.INITIALIZED, this::configureManually));
-        menu.addItem(new MenuItem("Random Code Setup", EngineState.INITIALIZED, this::configureRandomly));
-        menu.addItem(new MenuItem("Process Input", EngineState.CONFIGURED, this::processInput));
-        menu.addItem(new MenuItem("Reset to Original Code", EngineState.CONFIGURED, this::resetMachine));
-        menu.addItem(new MenuItem("History", EngineState.INITIALIZED, this::displayStatistics));
+        menu.addItem(new MenuItem("Load machine configuration from file", EngineState.UNINITIALIZED, this::loadConfiguration));
+        menu.addItem(new MenuItem("Display machine specifications", EngineState.INITIALIZED, this::displaySpecifications));
+        menu.addItem(new MenuItem("Configure machine manually", EngineState.INITIALIZED, this::configureManually));
+        menu.addItem(new MenuItem("Configure machine randomly", EngineState.INITIALIZED, this::configureRandomly));
+        menu.addItem(new MenuItem("Process input text", EngineState.CONFIGURED, this::processInput));
+        menu.addItem(new MenuItem("Reset machine to initial configuration", EngineState.CONFIGURED, this::resetMachine));
+        menu.addItem(new MenuItem("Display statistics and history", EngineState.INITIALIZED, this::displayStatistics));
         menu.addItem(new MenuItem("Exit", EngineState.UNINITIALIZED, this::quit));
-        menu.addItem(new MenuItem("Load from File", EngineState.UNINITIALIZED, this::loadMachineState));
-        menu.addItem(new MenuItem("Save to File", EngineState.CONFIGURED, this::saveMachineState));
+        menu.addItem(new MenuItem("Load saved machine state from file", EngineState.UNINITIALIZED, this::loadMachineState));
+        menu.addItem(new MenuItem("Save machine state to file", EngineState.CONFIGURED, this::saveMachineState));
 
         return menu;
     }
