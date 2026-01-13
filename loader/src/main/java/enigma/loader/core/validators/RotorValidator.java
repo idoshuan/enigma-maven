@@ -25,6 +25,7 @@ public class RotorValidator implements Validator {
 
     @Override
     public void validate() {
+        ensurePositiveRequiredRotorCount();
         ensureMinimumRotors();
         ensureSufficientRotorsForRequiredCount();
         ensureContinuousIds();
@@ -32,6 +33,12 @@ public class RotorValidator implements Validator {
         ensureValidMappingCount();
         ensureNoDuplicateMappings();
         ensureValidMappingCharacters();
+    }
+
+    private void ensurePositiveRequiredRotorCount() {
+        if (requiredRotorCount < 1) {
+            throw new InvalidRotorCountException(requiredRotorCount);
+        }
     }
 
     private void ensureMinimumRotors() {
