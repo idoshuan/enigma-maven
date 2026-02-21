@@ -1,0 +1,26 @@
+package enigma.engine.core;
+
+import enigma.core.Inventory;
+import enigma.engine.dtos.EngineDetails;
+import enigma.engine.dtos.MachineCode;
+import enigma.engine.dtos.SessionRecord;
+
+import java.util.List;
+import java.util.Set;
+
+public interface Engine {
+
+    void loadFromFile(String path);
+    void loadFromInventory(Inventory inventory);
+    EngineDetails getEngineDetails();
+    void configureMachineManually(MachineCode setup);
+    void configureMachineRandomly();
+    String process(String input);
+    void resetConfiguration();
+    List<SessionRecord> getStatistics();
+    Set<Integer> getAvailableRotorIds();
+    Set<Integer> getAvailableReflectorIds();
+    int getRequiredRotorCount();
+    void saveState(String path);
+    void loadState(String path);
+}

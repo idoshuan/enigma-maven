@@ -13,13 +13,26 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-boot.version>3.2.5</spring-boot.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <modules>
-        <module>machine</module>
-        <module>engine</module>
-        <module>loader</module>
-        <module>console</module>
-        <module>core</module>
+        <module>enigma-logic</module>
+        <module>enigma-sessions</module>
+        <module>enigma-dal</module>
+        <module>enigma-api</module>
+        <module>enigma-app</module>
     </modules>
 </project>
