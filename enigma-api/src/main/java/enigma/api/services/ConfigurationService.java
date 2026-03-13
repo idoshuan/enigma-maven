@@ -62,7 +62,7 @@ public class ConfigurationService {
         );
     }
 
-    public void configureManually(ManualConfigRequest request) {
+    public String configureManually(ManualConfigRequest request) {
         Engine engine = sessionManager.getSession(request.sessionID()).engine();
 
         // API sends rotors L→R, engine expects R→L — reverse
@@ -93,16 +93,19 @@ public class ConfigurationService {
 
         MachineCode code = new MachineCode(rotorIds, positions, reflectorId, plugboardPairs);
         engine.configureMachineManually(code);
+        return "Manual code set successfully";
     }
 
-    public void configureAutomatically(String sessionId) {
+    public String configureAutomatically(String sessionId) {
         Engine engine = sessionManager.getSession(sessionId).engine();
         engine.configureMachineRandomly();
+        return "Automatic code setup completed successfully";
     }
 
-    public void resetConfiguration(String sessionId) {
+    public String resetConfiguration(String sessionId) {
         Engine engine = sessionManager.getSession(sessionId).engine();
         engine.resetConfiguration();
+        return "Automatic code setup completed successfully";
     }
 
     private EnigmaCodeStructure toCodeStructure(CodeDetails code) {

@@ -29,8 +29,10 @@ public class ProcessService {
         this.machineRepository = machineRepository;
     }
 
-    public ProcessResponse process(String sessionId, String input) {
-        SessionManager.SessionContext context = sessionManager.getSession(sessionId);
+    public ProcessResponse process(String sessionID, String sessionId, String input) {
+        String resolvedSessionId = sessionID != null ? sessionID : sessionId;
+
+        SessionManager.SessionContext context = sessionManager.getSession(resolvedSessionId);
         Engine engine = context.engine();
 
         EngineDetails detailsBefore = engine.getEngineDetails();
@@ -55,7 +57,7 @@ public class ProcessService {
 
         if (machineId != null) {
             ProcessingEntity entity = new ProcessingEntity(
-                    machineId, sessionId, codeCompact, input, output, duration
+                    machineId, resolvedSessionId, codeCompact, input, output, duration
             );
             processingRepository.save(entity);
         }

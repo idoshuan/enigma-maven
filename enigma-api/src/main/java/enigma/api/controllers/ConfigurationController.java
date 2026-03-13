@@ -26,19 +26,16 @@ public class ConfigurationController {
 
     @PutMapping(value = "/manual", produces = "text/plain")
     public ResponseEntity<String> configureManually(@RequestBody ManualConfigRequest request) {
-        configurationService.configureManually(request);
-        return ResponseEntity.ok("Manual code set successfully");
+        return ResponseEntity.ok(configurationService.configureManually(request));
     }
 
     @PutMapping(value = "/automatic", produces = "text/plain")
     public ResponseEntity<String> configureAutomatically(@RequestParam("sessionID") String sessionId) {
-        configurationService.configureAutomatically(sessionId);
-        return ResponseEntity.ok("Automatic code setup completed successfully");
+        return ResponseEntity.ok(configurationService.configureAutomatically(sessionId));
     }
 
     @PutMapping(value = "/reset", produces = "text/plain")
     public ResponseEntity<String> resetConfiguration(@RequestParam("sessionID") String sessionId) {
-        configurationService.resetConfiguration(sessionId);
-        return ResponseEntity.ok("Automatic code setup completed successfully");
+        return ResponseEntity.ok(configurationService.resetConfiguration(sessionId));
     }
 }

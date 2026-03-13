@@ -20,8 +20,7 @@ public class ProcessController {
             @RequestParam("input") String input,
             @RequestParam(value = "sessionID", required = false) String sessionID,
             @RequestParam(value = "sessionId", required = false) String sessionId) {
-        String resolvedSessionId = sessionID != null ? sessionID : sessionId;
-        ProcessResponse response = processService.process(resolvedSessionId, input);
+        ProcessResponse response = processService.process(sessionID, sessionId, input);
         return ResponseEntity.ok(response);
     }
 }
