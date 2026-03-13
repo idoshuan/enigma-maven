@@ -115,21 +115,11 @@ public class InventoryEntityConverter {
     }
 
     private String buildLeftColumn(Rotor rotor, String rightColumn, Alphabet alphabet) {
-        Map<Integer, Integer> forwardWiring = new HashMap<>();
-        for (int i = 0; i < alphabet.size(); i++) {
-            char letter = alphabet.toChar(i);
-            int rightIndex = rightColumn.indexOf(letter);
-            forwardWiring.put(rightIndex, rotor.process(rightIndex, enigma.core.rotor.Direction.FORWARD));
-        }
-
         char[] leftColumn = new char[alphabet.size()];
-        for (int i = 0; i < alphabet.size(); i++) {
-            char rightChar = rightColumn.charAt(i);
-            int rightAlphabetIndex = alphabet.toIndex(rightChar);
-            int leftAlphabetIndex = forwardWiring.get(i);
-            leftColumn[i] = alphabet.toChar(leftAlphabetIndex);
+        for (int p = 0; p < alphabet.size(); p++) {
+            int q = rotor.process(p, enigma.core.rotor.Direction.FORWARD);
+            leftColumn[q] = rightColumn.charAt(p);
         }
-
         return new String(leftColumn);
     }
 }
