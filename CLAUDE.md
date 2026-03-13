@@ -28,12 +28,12 @@ This is a Java 21 Enigma Machine simulator converted to a Spring Boot 3.2 REST A
 
 ```
 enigma-aggregator (root pom, Spring Boot BOM)
-├── enigma-logic/          (sub-aggregator for core logic modules)
+├── enigma-logic/          (sub-aggregator for core logic + sessions)
 │   ├── core               (domain model: Alphabet, Rotor, Reflector, Inventory)
 │   ├── machine            (Enigma simulation: plugboard → rotors → reflector → rotors → plugboard)
 │   ├── loader             (XML/JAXB config loading + validation against Enigma-Ex3.xsd)
-│   └── engine             (orchestration: configuration, processing, statistics)
-├── enigma-sessions/       (multi-machine session management: MachineRegistry, SessionManager)
+│   ├── engine             (orchestration: configuration, processing, statistics)
+│   └── sessions           (multi-machine session management: MachineRegistry, SessionManager)
 ├── enigma-dal/            (JPA entities + Spring Data repositories for Postgres)
 ├── enigma-api/            (REST controllers, services, DTOs, CompactCodeFormatter)
 └── enigma-app/            (Spring Boot main class + config, produces fat JAR)
@@ -47,7 +47,7 @@ enigma-aggregator (root pom, Spring Boot BOM)
 
 **enigma-logic/engine** — Business logic: wires `Machine` + `CodeValidator` + `StatisticsTracker`. Handles manual/random configuration and message processing. Supports `loadFromInventory()` for session-based initialization.
 
-**enigma-sessions** — `MachineRegistry` holds loaded `Inventory` objects by name. `SessionManager` creates UUID-based sessions with isolated `Engine` instances.
+**enigma-logic/sessions** — `MachineRegistry` holds loaded `Inventory` objects by name. `SessionManager` creates UUID-based sessions with isolated `Engine` instances.
 
 **enigma-dal** — JPA entities (`MachineEntity`, `MachineRotorEntity`, `MachineReflectorEntity`, `ProcessingEntity`) and Spring Data repositories. `InventoryEntityConverter` converts between domain objects and DB entities.
 

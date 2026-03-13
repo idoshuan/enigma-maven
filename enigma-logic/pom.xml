@@ -18,5 +18,6 @@
         <module>machine</module>
         <module>loader</module>
         <module>engine</module>
+        <module>sessions</module>
     </modules>
 </project>

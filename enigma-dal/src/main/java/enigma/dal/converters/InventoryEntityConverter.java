@@ -47,16 +47,11 @@ public class InventoryEntityConverter {
 
             StringBuilder inputStr = new StringBuilder();
             StringBuilder outputStr = new StringBuilder();
-            Set<Integer> seen = new HashSet<>();
 
             for (int i = 0; i < inventory.alphabet().size(); i++) {
-                if (!seen.contains(i)) {
-                    int reflected = reflector.reflect(i);
-                    inputStr.append(inputStr.isEmpty() ? "" : ",").append(i + 1);
-                    outputStr.append(outputStr.isEmpty() ? "" : ",").append(reflected + 1);
-                    seen.add(i);
-                    seen.add(reflected);
-                }
+                int reflected = reflector.reflect(i);
+                inputStr.append(i > 0 ? "," : "").append(i + 1);
+                outputStr.append(i > 0 ? "," : "").append(reflected + 1);
             }
 
             reflectorEntities.add(new MachineReflectorEntity(
@@ -103,7 +98,6 @@ public class InventoryEntityConverter {
             Map<Integer, Integer> wiring = new HashMap<>();
             for (int i = 0; i < inputs.length; i++) {
                 wiring.put(inputs[i], outputs[i]);
-                wiring.put(outputs[i], inputs[i]);
             }
 
             reflectors.put(reflectorId, new ReflectorImpl(wiring));

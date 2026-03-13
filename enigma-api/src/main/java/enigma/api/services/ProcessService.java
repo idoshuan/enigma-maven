@@ -40,7 +40,8 @@ public class ProcessService {
 
         long startTime = System.nanoTime();
         String output = engine.process(input);
-        long duration = System.nanoTime() - startTime;
+        long durationNanos = System.nanoTime() - startTime;
+        long duration = durationNanos / 1_000_000; // convert to milliseconds
 
         EngineDetails detailsAfter = engine.getEngineDetails();
         String currentPositionCompact = detailsAfter.currentCode()

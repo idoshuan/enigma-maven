@@ -30,7 +30,6 @@
 
     <modules>
         <module>enigma-logic</module>
-        <module>enigma-sessions</module>
         <module>enigma-dal</module>
         <module>enigma-api</module>
         <module>enigma-app</module>

@@ -18,8 +18,10 @@ public class ProcessController {
     @PostMapping("/process")
     public ResponseEntity<ProcessResponse> process(
             @RequestParam("input") String input,
-            @RequestParam("sessionID") String sessionId) {
-        ProcessResponse response = processService.process(sessionId, input);
+            @RequestParam(value = "sessionID", required = false) String sessionID,
+            @RequestParam(value = "sessionId", required = false) String sessionId) {
+        String resolvedSessionId = sessionID != null ? sessionID : sessionId;
+        ProcessResponse response = processService.process(resolvedSessionId, input);
         return ResponseEntity.ok(response);
     }
 }

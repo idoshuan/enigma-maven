@@ -39,10 +39,10 @@ public class LoaderService {
                 throw new MachineAlreadyExistsException(name);
             }
 
-            machineRegistry.register(name, inventory);
-
             MachineEntity machineEntity = converter.toMachineEntity(inventory);
             machineRepository.save(machineEntity);
+
+            machineRegistry.register(name, inventory);
 
             return LoadResponse.success(name);
         } catch (IOException e) {
